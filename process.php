@@ -24,13 +24,27 @@
 			$_SESSION['errors'][] = "First name required";
 		}
 		if(empty($_POST['last_name'])){
-			$_SESSION['errors'][] = "last name required";
+			$_SESSION['errors'][] = "Last name required";
+		}
+        if(preg_match('([a-zA-Z].*[0-9]|[0-9].*[a-zA-Z])', $_POST['first_name'])){
+			$_SESSION['errors'][] = "first_name field should not contain numbers";
+		}
+		if(preg_match('([a-zA-Z].*[0-9]|[0-9].*[a-zA-Z])', $_POST['last_name'])){
+			$_SESSION['errors'][] = "last_name field should not contain numbers";
 		}
 		if(empty($_POST['password'])){
             $_SESSION['errors'][] = "Password required!";
         }
+        if(empty($_POST['confirm_pass'])){
+            $_SESSION['errors'][] = "Confirm password required!";
+        }
 		if($_POST['password'] !== $_POST['confirm_pass']){
 			$_SESSION['errors'][] = "Password and confirmation must match!";
+		}
+        if($_POST['password']){
+            if(strlen($_POST['password']) < 8){
+                $_SESSION['errors'][] = "Password length should be greater than 8 characters";
+            }
 		}
 		if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 			$_SESSION['errors'][] = "Please use a valid email address!";
