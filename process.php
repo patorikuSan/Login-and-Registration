@@ -26,6 +26,16 @@
 		if(empty($_POST['last_name'])){
 			$_SESSION['errors'][] = "Last name required";
 		}
+		if($_POST['first_name']){
+			if(strlen($_POST['first_name']) < 2){
+				$_SESSION['errors'][] = "First name should not be less than 2 characters";
+			}	
+		}
+		if($_POST['last_name']){
+			if(strlen($_POST['last_name']) < 2){
+				$_SESSION['errors'][] = "Last name should not be less than 2 characters";
+			}
+		}
         if(preg_match('([a-zA-Z].*[0-9]|[0-9].*[a-zA-Z])', $_POST['first_name'])){
 			$_SESSION['errors'][] = "first_name field should not contain numbers";
 		}
@@ -61,10 +71,7 @@
 			$email = escape_this_string($_POST['email']);
 			$sql = "INSERT INTO register_table (first_name, last_name, email, password, created_at, updated_at) 
 			VALUES ('{$_POST['first_name']}','{$_POST['last_name']}','$email','$password', now(), now())";
-
-			// $sql = "INSERT INTO register_table (first_name, last_name, email, password, created_at, updated_at) 
-			// 		VALUES ('{$_POST['first_name']}','{$_POST['last_name']}','{$_POST['email']}','{$_POST['password']}', now(), now())";
-
+			
 			run_mysql_query($sql);
 			$_SESSION['message'] = "New user added!";
 			header('location: index.php');
@@ -78,8 +85,7 @@
 		$email = escape_this_string($_POST['email']);
 		$sql = "SELECT * FROM register_table WHERE register_table.email = '{$email}'
 		AND register_table.password = '{$password}'";
-		// $sql = "SELECT * FROM register_table WHERE register_table.email = '{$_POST['email']}'
-		// 				 AND register_table.password = '{$_POST['password']}'";
+		
 		$user = fetch_all($sql);
 		if(count($user) > 0){
 			$_SESSION['user_id'] = $user[0]['id'];
