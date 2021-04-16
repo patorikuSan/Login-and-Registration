@@ -57,9 +57,13 @@
 			die();
 
 		} else {
-			
+			$password = md5($_POST['password']);
+			$email = escape_this_string($_POST['email']);
 			$sql = "INSERT INTO register_table (first_name, last_name, email, password, created_at, updated_at) 
-					VALUES ('{$_POST['first_name']}','{$_POST['last_name']}','{$_POST['email']}','{$_POST['password']}', now(), now())";
+			VALUES ('{$_POST['first_name']}','{$_POST['last_name']}','$email','$password', now(), now())";
+
+			// $sql = "INSERT INTO register_table (first_name, last_name, email, password, created_at, updated_at) 
+			// 		VALUES ('{$_POST['first_name']}','{$_POST['last_name']}','{$_POST['email']}','{$_POST['password']}', now(), now())";
 
 			run_mysql_query($sql);
 			$_SESSION['message'] = "New user added!";
@@ -70,8 +74,12 @@
 	}
 
 	function login_user($post){
-		$sql = "SELECT * FROM register_table WHERE register_table.email = '{$_POST['email']}'
-						 AND register_table.password = '{$_POST['password']}'";
+		$password = md5($_POST['password']);
+		$email = escape_this_string($_POST['email']);
+		$sql = "SELECT * FROM register_table WHERE register_table.email = '{$email}'
+		AND register_table.password = '{$password}'";
+		// $sql = "SELECT * FROM register_table WHERE register_table.email = '{$_POST['email']}'
+		// 				 AND register_table.password = '{$_POST['password']}'";
 		$user = fetch_all($sql);
 		if(count($user) > 0){
 			$_SESSION['user_id'] = $user[0]['id'];
